@@ -7,7 +7,6 @@ import urllib.request
 from lxml import etree
 
 # This is the script for collecting wall paper download links from wall.alphacoders.com.
-# the result will be stored at /Users/GeniusV/Desktop/result.txt
 # For default, it will collect from 1st page to 999th page. The number can be changed by changing maxNumber
 # This can automatically stop requesting if there is no more pages.
 
@@ -20,13 +19,19 @@ from lxml import etree
 # url = 'https://wall.alphacoders.com/by_sub_category.php?id=251328&name=Gabriel+DropOut+Wallpapers&page='
 
 # EroManga-Sensei
-url = 'https://wall.alphacoders.com/by_sub_category.php?id=241233&name=EroManga-Sensei+Wallpapers&page='
+# url = 'https://wall.alphacoders.com/by_sub_category.php?id=241233&name=EroManga-Sensei+Wallpapers&page='
 
+# Rokudenashi Majutsu Koushi To Akashic Records
+# url = 'https://wall.alphacoders.com/by_sub_category.php?id=255990&name=Rokudenashi+Majutsu+Koushi+To+Akashic+Records+Wallpapers&page='
+
+# CLANNAD
+url ='https://wall.alphacoders.com/by_sub_category.php?id=172967&name=Clannad+Wallpapers&page='
 maxNumber = 999
 first = None
 count = 0
 
 # open the file to store the result
+# the result will be stored at /Users/GeniusV/Desktop/result.txt
 with open('/Users/GeniusV/Desktop/result.txt', 'w') as file:
     # loop for the real urls containing the links
     for currentNumber in range(1, maxNumber):
