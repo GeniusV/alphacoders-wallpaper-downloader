@@ -59,3 +59,4 @@ with open('/Users/GeniusV/Desktop/result.txt', 'w') as file:
             break
 
 print("total: " + str(count))
+ke
