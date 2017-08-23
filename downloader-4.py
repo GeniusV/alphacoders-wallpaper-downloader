@@ -132,20 +132,31 @@ def do_page(realUrl, name, lock, count):
 
 def do_animate(name, url):
     count = Count()
-    os.makedirs('/Users/GeniusV/Desktop/%s/' % name)
-    maxNumber = get_total_page(url) + 1
+    delete = True
+    try:
+        os.makedirs('/Users/GeniusV/Desktop/%s/' % name)
+    except FileExistsError as e:
+        print('/Users/GeniusV/Desktop/%s/ exists' % name)
+        delete = False
+    maxNumber, single = get_total_page(url)
     lock = threading.Lock()
     thread_list = []
-    for currentNumber in range(1, maxNumber):
-        realUrl = url + str(currentNumber)
-        thread = threading.Thread(target = do_page, args = (realUrl, name, lock, count))
+    if single:
+        thread = threading.Thread(target = do_page, args = (url, name, lock, count))
         thread.start()
         thread_list.append(thread)
+    else:
+        maxNumber += 1
+        for currentNumber in range(1, maxNumber):
+            realUrl = url + str(currentNumber)
+            thread = threading.Thread(target = do_page, args = (realUrl, name, lock, count))
+            thread.start()
+            thread_list.append(thread)
 
     for thread in thread_list:
         thread.join()
 
-    if count.i == 0:
+    if count.i == 0 and delete:
         shutil.rmtree('/Users/GeniusV/Desktop/%s' % name)
 
 
@@ -155,7 +166,10 @@ def get_total_page(url):
     html = data.read()
     page = etree.HTML(html)
     p = page.xpath(u"//a[@id='next_page']/../../li[last()-1]/a")
-    return int(p[0].text)
+    if not p:
+        return 1, True
+    else:
+        return int(p[0].text), False
 
 
 if __name__ == '__main__':
@@ -175,7 +189,6 @@ if __name__ == '__main__':
             thread.start()
 
     except Exception as e:
-        raise e
         for name, url in urls.items():
             thread = threading.Thread(target = do_animate, args = (name, url))
             thread.start()
